@@ -12,8 +12,8 @@ export class ProductContractController {
     private readonly signer: ethers.Wallet;
 
     constructor() {
-        this.provider = new ethers.JsonRpcProvider(process.env.INFURA_PROJECT_LINK);
-        const privateKey = process.env.INFURA_KEY;
+        this.provider = new ethers.JsonRpcProvider(process.env.CONTRACT_PROVIDER_LINK);
+        const privateKey = process.env.CONTRACT_PROVIDER_KEY;
         this.signer = new ethers.Wallet(privateKey, this.provider);
     }
 
