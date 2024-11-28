@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,16 +26,26 @@ class Client
     #[Assert\NotBlank]
     private string $balance;
 
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[Assert\NotBlank]
     private string $telegramId;
 
     /** @var Collection<int, ReadyProduct> */
     #[ORM\OneToMany(targetEntity: ReadyProduct::class, mappedBy: 'client')]
     private Collection $Orders;
 
-    public function __construct()
-    {
+    #[ORM\Column]
+    private DateTimeImmutable $created_at;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $updated_at = null;
+
+    public function __construct(
+        string $telegramId,
+    ) {
+        $this->telegramId = $telegramId;
         $this->Orders = new ArrayCollection();
+        $this->created_at = new DateTimeImmutable();
     }
 
     public function getId(): int
@@ -66,9 +77,7 @@ class Client
         return $this;
     }
 
-    /**
-     * @return Collection<int, ReadyProduct>
-     */
+    /** @return Collection<int, ReadyProduct> */
     public function getOrders(): Collection
     {
         return $this->Orders;
@@ -92,6 +101,23 @@ class Client
                 $order->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

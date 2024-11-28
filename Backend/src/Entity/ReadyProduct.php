@@ -21,10 +21,11 @@ class ReadyProduct
 
     #[ORM\Column]
     #[Assert\Positive]
+    #[Assert\GreaterThanOrEqual(0, message: "Product quantity should be grater or equal 0.")]
     private float $quantity;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Assert\Positive]
+    #[Assert\Positive(message: "Price shouldn't be zero")]
     private string $price;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 9, scale: 6, nullable: true)]
@@ -58,6 +59,23 @@ class ReadyProduct
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updated_at = null;
 
+    public function __construct(
+        float $quantity,
+        string $price,
+        array $photos,
+        string $contract_address,
+        ?string $latitude,
+        ?string $longitude,
+    ) {
+        $this->quantity = $quantity;
+        $this->price = $price;
+        $this->photos = $photos;
+        $this->contract_address = $contract_address;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->created_at = new DateTimeImmutable();
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -75,12 +93,13 @@ class ReadyProduct
         return $this;
     }
 
-    public function getPrice(): float
+
+    public function getPrice(): string
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): static
+    public function setPrice(string $price): static
     {
         $this->price = $price;
 
@@ -111,7 +130,7 @@ class ReadyProduct
         return $this;
     }
 
-    /** @return string[] */
+    /** @return array<string, string> */
     public function getCoordinates(): array
     {
         if ($this->latitude == null || $this->longitude === null) {
@@ -129,7 +148,6 @@ class ReadyProduct
         $this->longitude = $coordinates[1];
 
         return $this;
-
     }
 
     /** @return string[] */
@@ -180,13 +198,6 @@ class ReadyProduct
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->created_at;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
     }
 
     public function getUpdatedAt(): ?DateTimeImmutable

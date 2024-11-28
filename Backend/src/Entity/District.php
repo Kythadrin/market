@@ -23,6 +23,14 @@ class District
     #[ORM\JoinColumn(nullable: false)]
     private City $city;
 
+    public function __construct(
+        string $name,
+        City $city,
+    ) {
+        $this->name = $name;
+        $this->city = $city;
+    }
+
     public function getId(): int
     {
         return $this->id;

@@ -23,17 +23,21 @@ class City
 
     #[ORM\ManyToOne(inversedBy: 'Cities')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Country $country;
+    private Country $country;
 
-    /**
-     * @var Collection<int, District>
-     */
+    /** @var Collection<int, District> */
     #[ORM\OneToMany(targetEntity: District::class, mappedBy: 'city')]
     private Collection $districts;
 
-    public function __construct()
-    {
-        $this->districts = new ArrayCollection();
+    /** @param  Collection<int, District> $districts*/
+    public function __construct(
+        string $name,
+        Country $country,
+        Collection $districts = new ArrayCollection(),
+    ) {
+        $this->name = $name;
+        $this->country = $country;
+        $this->districts = $districts;
     }
 
     public function getId(): int

@@ -16,18 +16,21 @@ class Country
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private int $id;
+    protected int $id;
 
     #[ORM\Column(length: 255, unique: true)]
     private string $name;
 
     /** @var Collection<int, City> */
     #[ORM\OneToMany(targetEntity: City::class, mappedBy: 'country')]
-    private Collection $Cities;
+    private Collection $cities;
 
-    public function __construct()
-    {
-        $this->Cities = new ArrayCollection();
+    public function __construct(
+        string $name,
+        Collection $cities = new ArrayCollection(),
+    ) {
+        $this->name = $name;
+        $this->cities = $cities;
     }
 
     public function getId(): int
@@ -50,13 +53,13 @@ class Country
     /** @return Collection<int, City> */
     public function getCities(): Collection
     {
-        return $this->Cities;
+        return $this->cities;
     }
 
     public function addCity(City $city): static
     {
-        if (!$this->Cities->contains($city)) {
-            $this->Cities->add($city);
+        if (!$this->cities->contains($city)) {
+            $this->cities->add($city);
             $city->setCountry($this);
         }
 

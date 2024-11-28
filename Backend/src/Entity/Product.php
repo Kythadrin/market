@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,6 +21,7 @@ class Product
     private int $id;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private string $name;
 
     /** @var Collection<int, ProductVariant> */
@@ -32,9 +34,13 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updated_at = null;
 
-    public function __construct()
-    {
-        $this->variants = new ArrayCollection();
+    public function __construct(
+        string $name,
+        Collection $variants = new ArrayCollection(),
+    ) {
+        $this->name = $name;
+        $this->variants = $variants;
+        $this->created_at = new DateTimeImmutable();
     }
 
     public function getId(): int
@@ -73,13 +79,6 @@ class Product
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->created_at;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
     }
 
     public function getUpdatedAt(): ?DateTimeImmutable
