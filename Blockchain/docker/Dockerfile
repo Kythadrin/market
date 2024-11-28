@@ -2,6 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/blockchain
 
+COPY .env* /var/www/blockchain/
 COPY Blockchain/package*.json ./
 
 RUN npm install
