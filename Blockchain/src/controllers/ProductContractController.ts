@@ -13,7 +13,7 @@ export class ProductContractController {
 
     constructor() {
         this.provider = new ethers.JsonRpcProvider(process.env.CONTRACT_PROVIDER_LINK);
-        const privateKey = process.env.CONTRACT_PROVIDER_KEY;
+        const privateKey: string = process.env.CONTRACT_PROVIDER_KEY ?? "";
         this.signer = new ethers.Wallet(privateKey, this.provider);
     }
 

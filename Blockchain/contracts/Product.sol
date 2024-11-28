@@ -25,13 +25,13 @@ contract Product {
     }
 
     function updateProduct(uint256 _id, uint256 _price, uint256 _quantity) public onlyOwner {
-        require(products[_id].exists, "Product does not exist");
+        require(products[_id].isAvailable, "Product does not exist");
         products[_id].price = _price;
         products[_id].quantity = _quantity;
     }
 
     function purchaseProduct(uint256 _id, uint256 _quantity) public payable {
-        require(products[_id].exists, "Product does not exist");
+        require(products[_id].isAvailable, "Product does not exist");
         require(products[_id].quantity >= _quantity, "Not enough quantity available");
         uint256 totalPrice = products[_id].price * _quantity;
         require(msg.value >= totalPrice, "Insufficient payment");
