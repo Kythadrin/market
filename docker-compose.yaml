@@ -21,12 +21,11 @@ services:
   php:
     image: php:8.3-fpm
     build:
-      context: .
       dockerfile: ./Backend/docker/php/Dockerfile
     ports:
       - ${VITE_PORT:-5174}:${VITE_PORT:-5174}
     volumes:
-      - ./Backend/:/var/www/market
+      - ./Backend:/var/www/market
     depends_on:
       - postgres
     networks:
@@ -41,12 +40,25 @@ services:
     volumes:
       - ./Backend/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       #      - ./docker/nginx/ssl:/etc/ssl
-      - ./Backend/:/var/www/market
+      - ./Backend:/var/www/market
     depends_on:
       - postgres
       - php
     networks:
       - app-network
+
+  blockchain:
+    build:
+      dockerfile: ./Blockchain/docker/Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./Blockchain:/var/www/blockchain
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - php
 
 networks:
   app-network:

@@ -1,0 +1,23 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@eslint/js": "^9.15.0",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "bitcoinjs-lib": "^7.0.0-rc.0",
+    "cors": "^2.8.5",
+    "eslint": "^9.15.0",
+    "express": "^4.21.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.16.0",
+    "web3": "^4.15.0"
+  }
+}
