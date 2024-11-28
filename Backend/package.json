@@ -1,0 +1,31 @@
+{
+  "name": "market",
+  "version": "1.0.0",
+  "description": "",
+  "main": "assets/app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "../node_modules/.bin/vite dev",
+    "build": "../node_modules/.bin/vite build",
+    "lint": "../node_modules/.bin/eslint --c .js,.jsx,.ts,.tsx ./assets/scripts",
+    "lint:fix": "../node_modules/.bin/eslint --c .js,.jsx,.ts,.tsx ./assets/scripts --fix",
+    "ts-check": "../node_modules/.bin/tsc --noemit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@eslint/js": "^9.15.0",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "bitcoinjs-lib": "^7.0.0-rc.0",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.16.0",
+    "vite": "^6.0.1",
+    "vite-plugin-symfony": "^7.1.0",
+    "web3": "^4.15.0"
+  }
+}
