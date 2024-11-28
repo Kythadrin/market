@@ -1,128 +1,45 @@
 pragma solidity ^0.8.0;
 
-contract ProductContract {
-    enum District {
-        Centrs,
-        Purvciems,
-        Plavnieki,
-        Kengarags,
-        Teika
-    }
-
+contract Product {
     struct Product {
-        string name;
-        uint256 amount;
+        uint256 id;
         uint256 price;
-        District district;
-        int256 latitude;
-        int256 longitude;
-        bytes32 imageHash;
-        bool isSold;
+        uint256 quantity;
+        bool isAvailable;
     }
 
-    Product[] public products;
-    mapping(uint256 => address) public productOwners;
-
+    mapping(uint256 => Product) public products;
     address public owner;
 
-
-    event ProductCreated(
-        uint256 productId,
-        string name,
-        uint256 amount,
-        uint256 price,
-        District district,
-        int256 latitude,
-        int256 longitude,
-        bytes32 imageHash,
-        bool isSold
-    );
-
-    event ProductPurchased(
-        uint256 productId,
-        address buyer,
-        uint256 price
-    );
-
-    constructor() {
-        owner = msg.sender;
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this");
+        _;
     }
 
-    function createProduct(
-        string memory _name,
-        string memory _variant,
-        uint256 _amount,
-        uint256 _price,
-        District _district,
-    ) public {
-        require(msg.sender == owner, "Only owner can create products.");
+    function addProduct(uint256 _id, uint256 _price, uint256 _quantity) public onlyOwner {
+        require(!products[_id].isAvailable, "Product already exists");
+        require(_price > 0, "Price must be greater than 0");
+        require(_quantity > 0, "Quantity must be greater than 0");
 
-        products.push(
-            Product(_name, _variant, _amount, _price, _district, false)
-        );
-
-        uint256 productId = products.length - 1;
-        productOwners[productId] = msg.sender;
-
-        emit ProductCreated(
-            _productId,
-            _name,
-            _variant,
-            _amount,
-            _price,
-            _district,
-            false
-        );
+        products[_id] = Product(_id, _price, _quantity, true);
     }
 
-    function buyProduct(uint256 productId) public payable {
-        Product storage _product = products[productId];
+    function updateProduct(uint256 _id, uint256 _price, uint256 _quantity) public onlyOwner {
+        require(products[_id].exists, "Product does not exist");
+        products[_id].price = _price;
+        products[_id].quantity = _quantity;
+    }
 
-        require(!_product.isSold, "Product already sold.");
+    function purchaseProduct(uint256 _id, uint256 _quantity) public payable {
+        require(products[_id].exists, "Product does not exist");
+        require(products[_id].quantity >= _quantity, "Not enough quantity available");
+        uint256 totalPrice = products[_id].price * _quantity;
+        require(msg.value >= totalPrice, "Insufficient payment");
 
-        require(msg.value >= _product.price, "Insufficient payment.");
+        products[_id].quantity -= _quantity;
 
-        uint256 price = _product.price;
-        uint256 refund = msg.value - price;
-
-        address productOwner = productOwners[productId];
-        (bool successOwner, ) = productOwner.call{value: price}("");
-        require(successOwner, "Transfer to product owner failed.");
-
-        if (refund > 0) {
-            (bool successRefund, ) = msg.sender.call{value: refund}("");
-            require(successRefund, "Refund failed.");
+        if (msg.value > totalPrice) {
+            payable(msg.sender).transfer(msg.value - totalPrice);
         }
-
-        _product.isSold = true;
-
-        emit ProductPurchased(productId, msg.sender, price);
-    }
-
-    function getProductsByDistrict(District _district) public view returns (Product[] memory) {
-        uint256 totalProducts = products.length;
-        uint256 districtProductCount = 0;
-
-        for (uint256 i = 0; i < totalProducts; i++) {
-            if (products[i].district == _district && !products[i].isSold) {
-                districtProductCount++;
-            }
-        }
-
-        Product[] memory districtProducts = new Product[](districtProductCount);
-        uint256 index = 0;
-
-        for (uint256 i = 0; i < totalProducts; i++) {
-            if (products[i].district == _district && !products[i].isSold) {
-                districtProducts[index] = products[i];
-                index++;
-            }
-        }
-
-        return districtProducts;
-    }
-
-    function getTotalProducts() public view returns (uint256) {
-        return products.length;
     }
 }
