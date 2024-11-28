@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { ExampleController } from "../controllers/ExampleController";
+import { ProductContractController } from "../controllers/ProductContractController";
 
-const exampleController = new ExampleController();
+const productContractController = new ProductContractController();
 const router = Router();
 
-router.get("/example", exampleController.getExample);
-router.post("/example", exampleController.postExample);
+// router.get("/example", exampleController.getExample);
+router.post("/deploy-product-contract", productContractController.deploy);
 
 export default router;

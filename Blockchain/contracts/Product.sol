@@ -50,31 +50,27 @@ contract ProductContract {
 
     function createProduct(
         string memory _name,
+        string memory _variant,
         uint256 _amount,
         uint256 _price,
         District _district,
-        int256 _latitude,
-        int256 _longitude,
-        bytes32 _imageHash
     ) public {
         require(msg.sender == owner, "Only owner can create products.");
 
         products.push(
-            Product(_name, _amount, _price, _district, _latitude, _longitude, _imageHash, false)
+            Product(_name, _variant, _amount, _price, _district, false)
         );
 
         uint256 productId = products.length - 1;
         productOwners[productId] = msg.sender;
 
         emit ProductCreated(
-            productId,
+            _productId,
             _name,
+            _variant,
             _amount,
             _price,
             _district,
-            _latitude,
-            _longitude,
-            _imageHash,
             false
         );
     }
