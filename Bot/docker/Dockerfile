@@ -2,7 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/bot
 
-COPY .env* /var/www/bot/
 COPY Bot/package*.json ./
 
 RUN npm install

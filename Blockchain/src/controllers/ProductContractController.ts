@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
 import {BaseContract, ethers} from "ethers";
-import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import {IContract} from "../interface/IContract";
-
-dotenv.config();
 
 export class ProductContractController {
     private readonly provider: ethers.JsonRpcProvider;

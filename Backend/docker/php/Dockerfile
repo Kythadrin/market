@@ -2,8 +2,6 @@ FROM php:8.3-fpm
 
 WORKDIR /var/www/market
 
-COPY .env* /var/www/market/
-
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     nginx \
     curl \
