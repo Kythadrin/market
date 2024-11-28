@@ -2,11 +2,13 @@
   "name": "blockchain",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "scripts": {
-    "lint": "../node_modules/.bin/eslint --c .js,.jsx,.ts,.tsx ./assets/scripts",
-    "lint:fix": "../node_modules/.bin/eslint --c .js,.jsx,.ts,.tsx ./assets/scripts --fix",
-    "ts-check": "../node_modules/.bin/tsc --noemit"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint --c .js,.jsx,.ts,.tsx ./src/",
+    "lint:fix": "eslint --c .js,.jsx,.ts,.tsx ./src/ --fix",
+    "ts-check": "tsc --noemit"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/express": "^5.0.0",
     "hardhat": "^2.22.16"
   }
 }

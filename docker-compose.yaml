@@ -37,6 +37,7 @@ services:
       dockerfile: ./Backend/docker/nginx/Dockerfile
     ports:
       - ${NGINX_SERVER_HOST_HTTP_PORT:-8080}:80
+#      - ${NGINX_SERVER_HOST_HTTP_PORT:-443}:443
     volumes:
       - ./Backend/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
 #      - ./docker/nginx/ssl:/etc/ssl
@@ -53,7 +54,7 @@ services:
     build:
       dockerfile: ./Blockchain/docker/Dockerfile
     expose:
-      - "8081"
+      - ${BLOCKCHAIN_PORT:-8081}
     environment:
       - NODE_ENV=production
     volumes:
@@ -66,16 +67,16 @@ services:
   bot:
     build:
       dockerfile: ./Bot/docker/Dockerfile
+    restart: always
     environment:
       - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - NODE_ENV=production
     volumes:
-      - ./bot:/usr/src/bot
+      - ./Bot:/usr/src/bot
     expose:
-      - "8082"
-    restart: always
+      - ${BOT_PORT:-8082}
     depends_on:
-      - blockchain
+      - nginx
     networks:
       - bot-network
 

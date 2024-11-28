@@ -8,6 +8,8 @@ RUN npm install
 
 COPY Blockchain/ ./
 
-EXPOSE 3000
+RUN npm run build
 
-CMD ["ts-node", "src/index.ts"]
+EXPOSE 8081
+
+CMD ["npm", "run", "start"]
