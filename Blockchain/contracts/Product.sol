@@ -1,45 +1,41 @@
 pragma solidity ^0.8.0;
 
 contract Product {
-    struct Product {
-        uint256 id;
-        uint256 price;
-        uint256 quantity;
-        bool isAvailable;
+    address public seller;
+    uint256 public productPrice;
+    bool public productSold;
+
+    event ProductPurchased(address indexed buyer, uint256 price);
+
+    constructor(uint256 _price) {
+        seller = msg.sender;
+        productPrice = _price;
+        productSold = false;
     }
 
-    mapping(uint256 => Product) public products;
-    address public owner;
+    function buyProduct() external payable {
+        require(msg.value == productPrice, "Incorrect payment amount");
+        require(!productSold, "Product already sold");
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this");
-        _;
+        productSold = true;
+
+        payable(seller).transfer(msg.value);
+
+        emit ProductPurchased(msg.sender, msg.value);
     }
 
-    function addProduct(uint256 _id, uint256 _price, uint256 _quantity) public onlyOwner {
-        require(!products[_id].isAvailable, "Product already exists");
-        require(_price > 0, "Price must be greater than 0");
-        require(_quantity > 0, "Quantity must be greater than 0");
-
-        products[_id] = Product(_id, _price, _quantity, true);
+    function isProductSold() external view returns (bool) {
+        return productSold;
     }
 
-    function updateProduct(uint256 _id, uint256 _price, uint256 _quantity) public onlyOwner {
-        require(products[_id].isAvailable, "Product does not exist");
-        products[_id].price = _price;
-        products[_id].quantity = _quantity;
+    function getProductPrice() external view returns (uint256) {
+        return productPrice;
     }
 
-    function purchaseProduct(uint256 _id, uint256 _quantity) public payable {
-        require(products[_id].isAvailable, "Product does not exist");
-        require(products[_id].quantity >= _quantity, "Not enough quantity available");
-        uint256 totalPrice = products[_id].price * _quantity;
-        require(msg.value >= totalPrice, "Insufficient payment");
+    function withdrawFunds() external {
+        require(msg.sender == seller, "Only the seller can withdraw funds");
+        require(productSold, "Product not sold yet");
 
-        products[_id].quantity -= _quantity;
-
-        if (msg.value > totalPrice) {
-            payable(msg.sender).transfer(msg.value - totalPrice);
-        }
+        payable(seller).transfer(address(this).balance);
     }
 }
