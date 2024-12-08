@@ -59,8 +59,19 @@ services:
       - NODE_ENV=production
     volumes:
       - ./Blockchain:/usr/src/blockchain
-    depends_on:
-      - nginx
+    networks:
+      - blockchain-network
+
+  ganache:
+    image: trufflesuite/ganache:latest
+    ports:
+      - ${BLOCKCHAIN_PORT:-8545}:${BLOCKCHAIN_PORT:-8545}
+    command:
+      - --server.port=8545
+      - --wallet.totalAccounts=10
+      - --wallet.defaultBalance=100
+      - --miner.blockGasLimit=8000000
+      - --wallet.mnemonic="test test test test test test test test test test test junk"
     networks:
       - blockchain-network
 
@@ -75,8 +86,6 @@ services:
       - ./Bot:/usr/src/bot
     expose:
       - ${BOT_PORT:-8082}
-    depends_on:
-      - nginx
     networks:
       - bot-network
 
