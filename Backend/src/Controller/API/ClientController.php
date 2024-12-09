@@ -37,7 +37,7 @@ class ClientController
     public function create(ClientInput $client): Response
     {
         try {
-            $this->clientService->createClient($client);
+            $this->clientService->create($client);
 
             $this->entityManager->flush();
         } catch (Exception $exception) {
@@ -71,5 +71,26 @@ class ClientController
         }
 
         return new JsonResponse($clientData, Response::HTTP_OK);
+    }
+
+    #[Route(path: '/api/client', methods: ['GET'])]
+    #[OA\Get(description: 'Get a client list.', summary: 'Get a list of clients')]
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'Client created successfully',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: ClientOutput::class)
+        )
+    )]
+    public function getList(): JsonResponse
+    {
+        try {
+            $clientList = $this->clientService->getList();
+        } catch (Exception $exception) {
+            return new JsonResponse('Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return new JsonResponse($clientList, Response::HTTP_OK);
     }
 }

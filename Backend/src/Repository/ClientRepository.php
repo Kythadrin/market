@@ -32,6 +32,22 @@ class ClientRepository extends ServiceEntityRepository
         return $client;
     }
 
+    /** @return Client[] */
+    public function getList(): array
+    {
+        /** @var Client[] $list */
+        $list = $this->createQueryBuilder('c')
+            ->andWhere('c.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('c.created_at', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $list;
+    }
+
+
 //    /**
 //     * @return Client[] Returns an array of Client objects
 //     */
