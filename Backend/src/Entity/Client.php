@@ -40,12 +40,16 @@ class Client
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column]
+    private ?bool $isActive = null;
+
     public function __construct(
         string $telegramId,
     ) {
         $this->telegramId = $telegramId;
         $this->Orders = new ArrayCollection();
         $this->created_at = new DateTimeImmutable();
+        $this->isActive = true;
     }
 
     public function getId(): int
@@ -118,6 +122,18 @@ class Client
     public function setUpdatedAt(?DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }
