@@ -43,6 +43,12 @@ class Client
     #[ORM\Column]
     private ?bool $isActive = null;
 
+    /**
+     * @var Collection<int, Payment>
+     */
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'Client')]
+    private Collection $payments;
+
     public function __construct(
         string $telegramId,
     ) {
@@ -50,6 +56,7 @@ class Client
         $this->Orders = new ArrayCollection();
         $this->created_at = new DateTimeImmutable();
         $this->isActive = true;
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): int
@@ -134,6 +141,36 @@ class Client
     public function setActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getClient() === $this) {
+                $payment->setClient(null);
+            }
+        }
 
         return $this;
     }
