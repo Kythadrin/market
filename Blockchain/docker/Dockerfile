@@ -1,15 +1,12 @@
 FROM node:18-alpine
 
-WORKDIR /usr/src/blockchain
+WORKDIR /var/www/blockchain
 
-COPY Blockchain/package*.json ./
+COPY ./Blockchain/package*.json ./
 
 RUN npm install
 
-COPY Blockchain/ ./
-
-RUN npm run build
-RUN npx hardhat compile
+COPY ./Blockchain/* .
 
 EXPOSE 8081
 

@@ -53,25 +53,13 @@ services:
   blockchain:
     build:
       dockerfile: ./Blockchain/docker/Dockerfile
-    expose:
-      - ${BLOCKCHAIN_PORT:-8081}
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./Blockchain:/usr/src/blockchain
-    networks:
-      - blockchain-network
-
-  ganache:
-    image: trufflesuite/ganache:latest
     ports:
       - ${BLOCKCHAIN_PORT:-8545}:${BLOCKCHAIN_PORT:-8545}
-    command:
-      - --server.port=8545
-      - --wallet.totalAccounts=10
-      - --wallet.defaultBalance=100
-      - --miner.blockGasLimit=8000000
-      - --wallet.mnemonic="test test test test test test test test test test test junk"
+    volumes:
+      - ./Blockchain:/var/www/blockchain
+      - /var/www/blockchain/node_modules
+    environment:
+      NODE_ENV: development
     networks:
       - blockchain-network
 

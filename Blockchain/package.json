@@ -2,33 +2,21 @@
   "name": "blockchain",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "src/app.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node src/app.js",
     "lint": "eslint --c .js,.jsx,.ts,.tsx ./src/",
-    "lint:fix": "eslint --c .js,.jsx,.ts,.tsx ./src/ --fix",
-    "ts-check": "tsc --noemit"
+    "lint:fix": "eslint --c .js,.jsx,.ts,.tsx ./src/ --fix"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@eslint/js": "^9.15.0",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
-    "bitcoinjs-lib": "^7.0.0-rc.0",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "eslint": "^9.15.0",
-    "ethers": "^6.13.4",
-    "express": "^4.21.1",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.16.0",
-    "web3": "^4.15.0"
-  },
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@types/express": "^5.0.0",
-    "hardhat": "^2.22.16"
+    "express": "^4.21.2",
+    "tronweb": "^6.0.0"
   }
 }
