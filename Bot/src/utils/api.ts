@@ -1,27 +1,20 @@
-import { config } from 'dotenv';
+import {config} from 'dotenv';
 
 config();
 
 const API_URL = process.env.BACKEND_URL!;
 const BOT_TOKEN = process.env.BOT_TOKEN!;
 
-export const createUser = async (telegramId: string): Promise<string> => {
+
+export const httpPostRequest = async (url: string, body: any): Promise<any> => {
     try {
-        const response = await fetch(API_URL + "/client", {
+        return await fetch(API_URL + url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                telegramId: telegramId
-            }),
+            body: JSON.stringify(body),
         });
-
-        if (!response.ok) {
-            throw new Error('Failed to create user');
-        }
-
-        return await response.text();
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
@@ -29,4 +22,4 @@ export const createUser = async (telegramId: string): Promise<string> => {
             throw new Error('An unknown error occurred');
         }
     }
-};
+}

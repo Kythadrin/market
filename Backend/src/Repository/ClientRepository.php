@@ -18,9 +18,9 @@ class ClientRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
-    public function findByTelegramId(string $telegramId): Client
+    public function findByTelegramId(string $telegramId): ?Client
     {
-        /** @var Client $client */
+        /** @var ?Client $client */
         $client = $this->createQueryBuilder('c')
             ->andWhere('c.telegramId = :telegramId')
             ->setParameter('telegramId', $telegramId)

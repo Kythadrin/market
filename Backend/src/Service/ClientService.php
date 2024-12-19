@@ -18,11 +18,17 @@ class ClientService
     ) {
     }
 
-    public function create(ClientInput $clientInput): void
+    public function create(ClientInput $clientInput): Client
     {
-        $client = new Client($clientInput->telegramId);
+        $client = $this->clientRepository->findByTelegramId($clientInput->telegramId);
 
-        $this->entityManager->persist($client);
+        if ($client === null) {
+            $client = new Client($clientInput->telegramId);
+
+            $this->entityManager->persist($client);
+        }
+
+        return $client;
     }
 
     public function getList(): array

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\DTO\Output;
 
+use App\Entity\Client as ClientEntity;
+use App\Entity\ReadyProduct;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,6 +22,19 @@ class Client
         #[Assert\NotBlank]
         #[Assert\Positive]
         public string $balance,
+        /** @var ReadyProduct[] $orders */
+        #[OA\Property(description: 'List of orders', type: 'array')]
+        public array $orders = [],
     ) {
+    }
+
+    public static function createFromEntity(ClientEntity $client): self
+    {
+        return new self(
+            id: $client->getId(),
+            telegramId: $client->getTelegramId(),
+            balance: $client->getBalance(),
+            orders: $client->getOrders()->toArray(),
+        );
     }
 }

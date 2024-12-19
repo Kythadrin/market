@@ -35,19 +35,19 @@ class ClientController
             schema: new OA\Schema(type: 'string', example: 'Client created successfully!')
         )
     )]
-    public function create(Request $request): Response
+    public function create(Request $request): JsonResponse
     {
         try {
             $data = json_decode($request->getContent(), true);
             $client = new ClientInput($data['telegramId']);
-            $this->clientService->create($client);
+            $client = $this->clientService->create($client);
 
             $this->entityManager->flush();
         } catch (Exception $exception) {
-            return new Response('Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse('Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new Response('Client created successfully!', Response::HTTP_CREATED);
+        return new JsonResponse(ClientOutput::createFromEntity($client), Response::HTTP_CREATED);
     }
 
     #[Route(path: '/api/client/{id}', methods: ['GET'])]
