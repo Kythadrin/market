@@ -2,7 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /var/www/blockchain
 
-COPY ./Blockchain/package*.json ./
+COPY ./Blockchain/package*.json .
 
 RUN npm install
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +25,7 @@ class Client
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Assert\Positive]
     #[Assert\NotBlank]
-    private string $balance;
+    private string $balance = '0.00';
 
     #[ORM\Column(type: Types::BIGINT, unique: true)]
     #[Assert\NotBlank]
@@ -41,7 +42,7 @@ class Client
     private ?DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
-    private ?bool $isActive = null;
+    private bool $isActive = true;
 
     /**
      * @var Collection<int, Payment>
@@ -55,7 +56,6 @@ class Client
         $this->telegramId = $telegramId;
         $this->Orders = new ArrayCollection();
         $this->created_at = new DateTimeImmutable();
-        $this->isActive = true;
         $this->payments = new ArrayCollection();
     }
 
@@ -71,6 +71,10 @@ class Client
 
     public function setBalance(string $balance): static
     {
+        if (!is_numeric($balance)) {
+            throw new InvalidArgumentException('Balance must be a numeric string.');
+        }
+
         $this->balance = $balance;
 
         return $this;
@@ -133,7 +137,7 @@ class Client
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isActive(): bool
     {
         return $this->isActive;
     }

@@ -11,6 +11,7 @@ use App\Entity\Client;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
@@ -34,9 +35,11 @@ class ClientController
             schema: new OA\Schema(type: 'string', example: 'Client created successfully!')
         )
     )]
-    public function create(ClientInput $client): Response
+    public function create(Request $request): Response
     {
         try {
+            $data = json_decode($request->getContent(), true);
+            $client = new ClientInput($data['telegramId']);
             $this->clientService->create($client);
 
             $this->entityManager->flush();

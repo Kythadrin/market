@@ -22,10 +22,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-#RUN pecl install xdebug \
-#    && docker-php-ext-enable xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
-#TODO fix './docker/php/xdebug.ini': No such file or directory
-#RUN cp ./docker/php/xdebug.ini  /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+COPY ./Backend/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 EXPOSE 9000 5173

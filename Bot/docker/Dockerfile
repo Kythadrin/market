@@ -1,13 +1,10 @@
-FROM node:18-alpine
+FROM node:18-alpine as build
 
 WORKDIR /usr/src/bot
 
-COPY Bot/package*.json ./
+COPY Bot .
 
 RUN npm install
-
-COPY Bot/ ./
-
 RUN npm run build
 
 EXPOSE 8082
