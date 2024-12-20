@@ -20,7 +20,7 @@ i18n.configure({
     objectNotation: true,
     updateFiles: false,
     register: global,
-    staticCatalog: translations
+    staticCatalog: translations,
 });
 
 export default i18n;
