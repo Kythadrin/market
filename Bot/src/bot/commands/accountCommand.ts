@@ -2,11 +2,11 @@ import { httpGetRequest } from '../../utils/api';
 import { getMainMenuButtons } from '../components/buttons';
 import { userProfile, IClient } from '../components/userProfile';
 import i18n from '../../utils/i18n';
-import { BotContext } from "../Bot";
 import { handleError } from "../handlers/errorHandler";
 import { MessageHandler } from "../handlers/MessageHandler";
+import {Context} from "telegraf";
 
-export const accountCommand = async (ctx: BotContext) => {
+export const accountCommand = async (ctx: Context) => {
     const messageHandler = new MessageHandler(ctx);
 
     const telegramId = ctx.from?.id.toString();

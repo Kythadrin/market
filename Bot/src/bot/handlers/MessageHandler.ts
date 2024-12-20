@@ -1,15 +1,15 @@
-import { BotContext } from "../Bot";
 import i18n from '../../utils/i18n';
-import {Telegraf} from "telegraf";
-import {startCommand} from "../commands/startCommand";
-import {getMainMenuButtons} from "../components/buttons";
-import {changeLanguageCommand, handleLanguageChange} from "../commands/changeLanguageCommand";
-import {accountCommand} from "../commands/accountCommand";
+import { Context, Telegraf } from "telegraf";
+import { startCommand } from "../commands/startCommand";
+import { getMainMenuButtons } from "../components/buttons";
+import { changeLanguageCommand, handleLanguageChange } from "../commands/changeLanguageCommand";
+import { accountCommand } from "../commands/accountCommand";
 
 export class MessageHandler {
-    private ctx: BotContext;
+    private ctx: Context;
+    private static previousBotMessageId: number | null = null;
 
-    constructor(ctx: BotContext) {
+    constructor(ctx: Context) {
         this.ctx = ctx;
     }
 
@@ -22,16 +22,13 @@ export class MessageHandler {
             }
         }
 
-        if (this.ctx.session?.lastMessageId) {
-            try {
-                await this.ctx.deleteMessage(this.ctx.session.lastMessageId);
-            } catch (error) {
-                console.error('Failed to delete previous bot message:', error);
-            }
+        if (MessageHandler.previousBotMessageId) {
+            await this.ctx.deleteMessage(MessageHandler.previousBotMessageId).catch(() => {});
         }
 
         const sentMessage = await this.ctx.reply(text, extra);
-        this.ctx.session!.lastMessageId = sentMessage.message_id;
+
+        MessageHandler.previousBotMessageId = sentMessage.message_id;
     }
 
     setLocale() {
@@ -39,55 +36,46 @@ export class MessageHandler {
         i18n.setLocale(i18n.getLocales().includes(clientLanguage) ? clientLanguage : 'en');
     }
 
-    handleCommands(bot: Telegraf<BotContext>) {
-        bot.start((ctx: BotContext) => {
-            ctx.session!.currentPage = 'main';
+    handleCommands(bot: Telegraf<Context>) {
+        bot.start((ctx: Context) => {
             startCommand(ctx).then();
             ctx.reply(i18n.__('welcome'), getMainMenuButtons()).then();
         });
 
-        bot.on('callback_query', async (ctx: BotContext) => {
+        bot.on('callback_query', async (ctx: Context) => {
             await handleLanguageChange(ctx);
 
-            bot.hears(i18n.__("buttons.main.account"), (ctx: BotContext) => {
-                ctx.session!.currentPage = 'account';
+            bot.hears(i18n.__("buttons.main.account"), (ctx: Context) => {
                 accountCommand(ctx);
             });
 
-            bot.hears(i18n.__("buttons.main.shop"), (ctx: BotContext) => {
-                ctx.session!.currentPage = 'shop';
+            bot.hears(i18n.__("buttons.main.shop"), (ctx: Context) => {
                 ctx.reply('Shop page');
             });
 
-            bot.hears(i18n.__("buttons.main.language"), (ctx: BotContext) => {
-                ctx.session!.currentPage = 'language';
+            bot.hears(i18n.__("buttons.main.language"), (ctx: Context) => {
                 changeLanguageCommand(ctx);
             });
 
-            bot.hears(i18n.__("buttons.main.add_funds"), (ctx: BotContext) => {
-                ctx.session!.currentPage = 'add_funds';
+            bot.hears(i18n.__("buttons.main.add_funds"), (ctx: Context) => {
                 ctx.reply("Add funds page");
             });
 
-            bot.hears(i18n.__("buttons.main.support"), (ctx: BotContext) => {
-                ctx.session!.currentPage = "support";
+            bot.hears(i18n.__("buttons.main.support"), (ctx: Context) => {
                 ctx.reply("Support page");
             });
 
-            bot.hears(i18n.__("buttons.main.reviews"), (ctx: BotContext) => {
-                ctx.session!.currentPage = "reviews";
+            bot.hears(i18n.__("buttons.main.reviews"), (ctx: Context) => {
                 ctx.reply("Reviews page");
             });
 
-            bot.hears(i18n.__("buttons.main.news"), (ctx: BotContext) => {
-                ctx.session!.currentPage = "news";
+            bot.hears(i18n.__("buttons.main.news"), (ctx: Context) => {
                 ctx.reply("News page");
             });
 
-            bot.hears(i18n.__("buttons.main.faq"), (ctx: BotContext) => {
-                ctx.session!.currentPage = "faq";
+            bot.hears(i18n.__("buttons.main.faq"), (ctx: Context) => {
                 ctx.reply("FAQ page");
             });
         });
-    };
+    }
 }
