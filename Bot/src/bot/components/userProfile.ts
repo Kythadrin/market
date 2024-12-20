@@ -2,6 +2,7 @@ import {formatDate} from "../../utils/dateFormat";
 import dayjs from "dayjs";
 
 export interface IClient {
+    id: number;
     telegramId: string;
     balance: number;
     createdAt: Date;
@@ -9,7 +10,7 @@ export interface IClient {
 }
 
 export interface IOrder {
-    id: string;
+    id: number;
     createdAt: Date;
     quantity: number;
     price: number;

@@ -50,9 +50,9 @@ class ClientController
         return new JsonResponse(ClientOutput::createFromEntity($client), Response::HTTP_CREATED);
     }
 
-    #[Route(path: '/api/client/{id}', methods: ['GET'])]
+    #[Route(path: '/api/client/{telegramId}', methods: ['GET'])]
     #[OA\Get(description: 'Get a client by id.', summary: 'Get a client')]
-    #[OA\Parameter(name: 'id', description: 'The ID of the client to retrieve', in: 'path', required: true)]
+    #[OA\Parameter(name: 'telegramId', description: 'The Telegram ID of the client to retrieve', in: 'path', required: true)]
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Client created successfully',
@@ -60,13 +60,21 @@ class ClientController
             ref: ClientOutput::class
         )
     )]
-    public function get(Client $client): JsonResponse
+    public function get(string $telegramId): JsonResponse
     {
         try {
+            $client = $this->clientService->findByTelegramId($telegramId);
+
+            if ($client === null) {
+                return new JsonResponse('Client not found!', Response::HTTP_NOT_FOUND);
+            }
+
             $clientData = new ClientOutput(
                 $client->getId(),
                 $client->getTelegramId(),
                 $client->getBalance(),
+                $client->getOrders()->toArray(),
+                $client->getCreatedAt()
             );
 
         } catch (Exception $exception) {

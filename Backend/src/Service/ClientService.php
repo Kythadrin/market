@@ -31,6 +31,11 @@ class ClientService
         return $client;
     }
 
+    public function findByTelegramId(string $telegramId): ?Client
+    {
+        return $this->clientRepository->findByTelegramId($telegramId);
+    }
+
     public function getList(): array
     {
         $list = $this->clientRepository->getList();
@@ -41,6 +46,8 @@ class ClientService
                 $client->getId(),
                 $client->getTelegramId(),
                 $client->getBalance(),
+                $client->getOrders()->toArray(),
+                $client->getCreatedAt()
             );
         }
 
