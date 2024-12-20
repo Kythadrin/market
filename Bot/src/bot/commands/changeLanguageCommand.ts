@@ -1,7 +1,7 @@
 import { Context } from 'telegraf';
 import i18n from '../../utils/i18n';
 import { CallbackQuery } from "@telegraf/types";
-import {getMenuButtons} from "../components/buttons";
+import {getMainMenuButtons} from "../components/buttons";
 
 export const changeLanguageCommand = async (ctx: Context) => {
     const languageButtons = i18n.getLocales().map((locale) => ({
@@ -22,6 +22,6 @@ export const handleLanguageChange = async (ctx: Context) => {
     if (langCode) {
         i18n.setLocale(langCode);
         await ctx.answerCbQuery();
-        await ctx.reply(i18n.__("language_changed", { language: i18n.__("language") }), getMenuButtons());
+        await ctx.reply(i18n.__("language_changed", { language: i18n.__("language") }), getMainMenuButtons());
     }
 };

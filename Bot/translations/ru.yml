@@ -15,6 +15,12 @@ no_orders: Заказов нет
 choose_language: Выберите язык
 language_changed: Язык изменен на {{language}}
 buttons:
-  account: Профиль
-  shop: Магазин
-  language: Язык
+  main:
+    account: Профиль
+    shop: Магазин
+    language: Язык
+    add_funds: Пополнить баланс
+    support: Поддержка
+    reviews: Отзывы
+    news: Новости
+    faq: ЧАВО

@@ -1,6 +1,6 @@
 import { Context } from 'telegraf';
 import { httpGetRequest } from '../../utils/api';
-import {getMenuButtons} from '../components/buttons';
+import {getMainMenuButtons} from '../components/buttons';
 import { userProfile, IClient } from '../components/userProfile';
 import i18n from '../../utils/i18n';
 
@@ -13,7 +13,7 @@ export const accountCommand = async (ctx: Context) => {
             if (response.ok) {
                 const clientData: IClient = await response.json();
 
-                await ctx.reply(userProfile(clientData), getMenuButtons());
+                await ctx.reply(userProfile(clientData), getMainMenuButtons());
             } else {
                 await ctx.reply(i18n.__('error') + response.statusText);
             }

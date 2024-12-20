@@ -15,6 +15,12 @@ no_orders: Nav pasūtījumu
 choose_language: Izvēlieties valodu
 language_changed: Valoda mainīta uz {{language}}
 buttons:
-  account: Profils
-  shop: Veikals
-  language: Valoda
+  main:
+    account: Profils
+    shop: Veikals
+    language: Valoda
+    add_funds: Pievienot līdzekļus
+    support: Atbalsts
+    reviews: Atsauksmes
+    news: Ziņas
+    faq: BUJ

@@ -15,6 +15,12 @@ no_orders: No orders
 choose_language: Choose language
 language_changed: Language changed to {{language}}
 buttons:
-  account: Profile
-  shop: Store
-  language: Language
+  main:
+    account: Profile
+    shop: Store
+    language: Language
+    add_funds: Add funds
+    support: Support
+    reviews: Reviews
+    news: News
+    faq: FAQ
