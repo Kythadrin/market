@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\DTO\Output;
 
 use App\Entity\ReadyProduct as ReadyProductEntity;
+use DateTimeImmutable;
 use OpenApi\Attributes as OA;
 
 class ReadyProduct
@@ -18,6 +19,8 @@ class ReadyProduct
         public string $price,
         #[OA\Property(description: 'Product name', example: 'Product')]
         public string $productName,
+        #[OA\Property(description: 'Date of creation', type: 'string', format: 'date-time')]
+        public DateTimeImmutable $created_at,
     ) {
     }
 
@@ -28,6 +31,7 @@ class ReadyProduct
             quantity: $product->getQuantity(),
             price: $product->getPrice(),
             productName: $product->getProductVariant()->getName(),
+            created_at: $product->getCreatedAt(),
         );
     }
 }

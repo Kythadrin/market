@@ -6,6 +6,7 @@ namespace App\DTO\Output;
 
 use App\Entity\Client as ClientEntity;
 use App\DTO\Output\ReadyProduct;
+use DateTimeImmutable;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,7 +27,7 @@ class Client
         #[OA\Property(description: 'List of orders', type: 'array')]
         public array $orders,
         #[OA\Property(description: 'Date of creation', type: 'string', format: 'date-time')]
-        public string $created_at,
+        public DateTimeImmutable $created_at,
     ) {
     }
 
@@ -37,7 +38,7 @@ class Client
             telegramId: $client->getTelegramId(),
             balance: $client->getBalance(),
             orders: array_map([ReadyProduct::class, 'createFromEntity'], $client->getOrders()->toArray()),
-            created_at: $client->getCreatedAt()->format('Y-m-d H:i:s'),
+            created_at: $client->getCreatedAt(),
         );
     }
 }
