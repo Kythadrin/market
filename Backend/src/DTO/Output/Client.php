@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\DTO\Output;
 
 use App\Entity\Client as ClientEntity;
-use App\Entity\ReadyProduct;
+use App\DTO\Output\ReadyProduct;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,7 +24,9 @@ class Client
         public string $balance,
         /** @var ReadyProduct[] $orders */
         #[OA\Property(description: 'List of orders', type: 'array')]
-        public array $orders = [],
+        public array $orders,
+        #[OA\Property(description: 'Date of creation', type: 'string', format: 'date-time')]
+        public string $created_at,
     ) {
     }
 
@@ -34,7 +36,8 @@ class Client
             id: $client->getId(),
             telegramId: $client->getTelegramId(),
             balance: $client->getBalance(),
-            orders: $client->getOrders()->toArray(),
+            orders: array_map([ReadyProduct::class, 'createFromEntity'], $client->getOrders()->toArray()),
+            created_at: $client->getCreatedAt()->format('Y-m-d H:i:s'),
         );
     }
 }

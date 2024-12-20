@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ProductVariantRepository;
 use DateTimeImmutable;
@@ -32,6 +34,12 @@ class ProductVariant
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updated_at = null;
 
+    /**
+     * @var Collection<int, ReadyProduct>
+     */
+    #[ORM\OneToMany(targetEntity: ReadyProduct::class, mappedBy: 'productVariant')]
+    private Collection $readyProducts;
+
     public function __construct(
         string $name,
         Product $product,
@@ -39,6 +47,7 @@ class ProductVariant
         $this->name = $name;
         $this->product = $product;
         $this->created_at = new DateTimeImmutable();
+        $this->readyProducts = new ArrayCollection();
     }
 
     public function getId(): int
@@ -83,6 +92,36 @@ class ProductVariant
     public function setUpdatedAt(?DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReadyProduct>
+     */
+    public function getReadyProducts(): Collection
+    {
+        return $this->readyProducts;
+    }
+
+    public function addReadyProduct(ReadyProduct $readyProduct): static
+    {
+        if (!$this->readyProducts->contains($readyProduct)) {
+            $this->readyProducts->add($readyProduct);
+            $readyProduct->setProductVariant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReadyProduct(ReadyProduct $readyProduct): static
+    {
+        if ($this->readyProducts->removeElement($readyProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($readyProduct->getProductVariant() === $this) {
+                $readyProduct->setProductVariant(null);
+            }
+        }
 
         return $this;
     }

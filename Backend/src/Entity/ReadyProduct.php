@@ -59,6 +59,10 @@ class ReadyProduct
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updated_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'readyProducts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ProductVariant $productVariant = null;
+
     public function __construct(
         float $quantity,
         string $price,
@@ -208,6 +212,18 @@ class ReadyProduct
     public function setUpdatedAt(?DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getProductVariant(): ?ProductVariant
+    {
+        return $this->productVariant;
+    }
+
+    public function setProductVariant(?ProductVariant $productVariant): static
+    {
+        $this->productVariant = $productVariant;
 
         return $this;
     }
