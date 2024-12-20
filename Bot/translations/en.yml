@@ -1,0 +1,20 @@
+language: English
+welcome: Welcome! I will create your account if it does not exist. Please wait.
+error: "Error: "
+no_telegram_id: Could not retrieve your Telegram ID. Please try again.
+account_info: |
+  Your ID: {{telegramId}}
+  Your Balance: {{balance}} €
+  Number of Orders: {{ordersCount}}
+  Total Order Amount: {{ordersPriceSum}} €
+  Registration Date: {{registrationDate}}
+
+  Orders:
+  {{orders}}
+no_orders: No orders
+choose_language: Choose language
+language_changed: Language changed to {{language}}
+buttons:
+  account: Profile
+  shop: Store
+  language: Language

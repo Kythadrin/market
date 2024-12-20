@@ -1,10 +1,14 @@
 import { Context } from 'telegraf';
 import { httpPostRequest } from '../../utils/api';
-import { shopButtons } from '../buttons';
+import { getMenuButtons } from '../components/buttons';
 import { userProfile, IClient } from '../components/userProfile';
+import i18n from '../../utils/i18n';
 
 export const startCommand = async (ctx: Context) => {
-    ctx.reply('Welcome! I will create your account if it not exist. Please wait.');
+    const clientLanguage: string = ctx.from?.language_code ?? 'en';
+    i18n.setLocale(i18n.getLocales().includes(clientLanguage) ? clientLanguage : 'en');
+
+    await ctx.reply(i18n.__('welcome'));
 
     const telegramId = ctx.from?.id.toString();
     if (telegramId) {
@@ -14,18 +18,18 @@ export const startCommand = async (ctx: Context) => {
             if (response.ok) {
                 const clientData: IClient = await response.json();
 
-                ctx.reply(userProfile(clientData), shopButtons);
+                await ctx.reply(userProfile(clientData), getMenuButtons());
             } else {
-                ctx.reply('Error: ' + response.statusText);
+                await ctx.reply(i18n.__('error') + response.statusText);
             }
         } catch (error: unknown) {
             if (error instanceof Error) {
-                ctx.reply('Error: ' + error.message);
+                await ctx.reply(i18n.__('error') + error.message);
             } else {
-                ctx.reply('error');
+                await ctx.reply('error');
             }
         }
     } else {
-        ctx.reply('Could not retrieve your Telegram ID. Please try again.');
+        await ctx.reply(i18n.__('no_telegram_id'));
     }
 };

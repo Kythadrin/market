@@ -1,0 +1,20 @@
+language: Русский
+welcome: Добро пожаловать! Я создам ваш аккаунт, если он еще не существует. Пожалуйста, подождите.
+error: "Ошибка: "
+no_telegram_id: Не удалось получить ваш Telegram ID. Пожалуйста, попробуйте еще раз.
+account_info: |
+  Ваш ID: {{telegramId}}
+  Ваш баланс: {{balance}} €
+  Количество заказов: {{ordersCount}}
+  Общая сумма заказов: {{ordersPriceSum}} €
+  Дата регистрации: {{registrationDate}}
+
+  Заказы:
+  {{orders}}
+no_orders: Заказов нет
+choose_language: Выберите язык
+language_changed: Язык изменен на {{language}}
+buttons:
+  account: Профиль
+  shop: Магазин
+  language: Язык

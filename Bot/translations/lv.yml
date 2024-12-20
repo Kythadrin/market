@@ -1,0 +1,20 @@
+language: Latviešu
+welcome: Laipni lūdzam! Es izveidošu jūsu kontu, ja tas vēl neeksistē. Lūdzu, uzgaidiet.
+error: "Kļūda: "
+no_telegram_id: Neizdevās iegūt jūsu Telegram ID. Lūdzu, mēģiniet vēlreiz.
+account_info: |
+  Jūsu ID: {{telegramId}}
+  Jūsu bilance: {{balance}} €
+  Pasūtījumu skaits: {{ordersCount}}
+  Pasūtījumu kopējā summa: {{ordersPriceSum}} €
+  Reģistrācijas datums: {{registrationDate}}
+
+  Pasūtījumi:
+  {{orders}}
+no_orders: Nav pasūtījumu
+choose_language: Izvēlieties valodu
+language_changed: Valoda mainīta uz {{language}}
+buttons:
+  account: Profils
+  shop: Veikals
+  language: Valoda

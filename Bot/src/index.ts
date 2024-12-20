@@ -1,6 +1,6 @@
-import { config } from 'dotenv';
-import './bot/bot';
+import { config } from "dotenv";
+import "./bot/bot";
 
 config();
 
-console.log('Telegram bot is running...');
+console.log("Telegram bot is running...");
